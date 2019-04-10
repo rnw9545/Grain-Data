@@ -1,0 +1,22 @@
+PROC IMPORT OUT= GRAIN.KISIMA 
+            DATAFILE= "E:\grain_1212.xlsx" 
+            DBMS=EXCEL out=grain REPLACE;
+     RANGE="Kiatine$"; 
+     GETNAMES=YES;
+     MIXED=NO;
+     SCANTEXT=YES;
+     USEDATE=YES;
+     SCANTIME=YES;
+RUN;
+proc glm;
+ class region type;
+ model total=region type;
+ lsmeans region type/stderr cl pdiff adjust=tukey;run;
+
+ *Include Kiatine as a region;
+data grain;
+proc glm;
+ class region type;
+ model total=region type;
+ lsmeans region type/stderr cl pdiff adjust=tukey;
+run;
