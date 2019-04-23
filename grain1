@@ -20,3 +20,19 @@ proc glm;
  model total=region type;
  lsmeans region type/stderr cl pdiff adjust=tukey;
 run;
+
+
+*new code run 4/23/2019 for grain analysis after adjusting for recovery rates.
+proc glm;
+ class region1 type;
+ model total_adjust=region1 type;
+ lsmeans region1 type/stderr cl pdiff adjust=tukey;run;
+proc surveymeans 
+  data= Work.ruth allgeo;
+  var total_adjust;
+run;
+proc surveymeans 
+  data= Work.ruth allgeo;
+  var g2f;run;
+proc means mean min max median range stderr maxdec=2;
+var g1f g2f b2f b1f total_adjust pcntb1_adjust;run;
